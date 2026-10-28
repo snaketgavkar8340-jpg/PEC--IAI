@@ -1,0 +1,57 @@
+import java.util.*; 
+class Node { 
+String name; 
+int heuristic; 
+Node(String name, int heuristic) { 
+this.name = name; 
+this.heuristic = heuristic; 
+} 
+} 
+public class BestFirstSearch { 
+public static void bestFirstSearch( 
+Map<String, List<String>> graph, 
+Map<String, Integer> heuristic, 
+String start, 
+String goal) { 
+Set<String> visited = new HashSet<>(); 
+PriorityQueue<Node> pq = new PriorityQueue<>( 
+Comparator.comparingInt(node -> node.heuristic)); 
+pq.add(new Node(start, heuristic.get(start))); 
+while (!pq.isEmpty()) { 
+Node current = pq.poll(); 
+if (visited.contains(current.name)) 
+continue; 
+System.out.print(current.name + " "); 
+visited.add(current.name); 
+if (current.name.equals(goal)) { 
+System.out.println("\nGoal Found!"); 
+return; 
+} 
+for (String neighbor : graph.get(current.name)) { 
+if (!visited.contains(neighbor)) { 
+pq.add(new Node(neighbor, heuristic.get(neighbor))); 
+} 
+} 
+} 
+System.out.println("\nGoal Not Found!"); 
+} 
+public static void main(String[] args) { 
+Map<String, List<String>> graph = new HashMap<>(); 
+graph.put("A", Arrays.asList("B", "C")); 
+graph.put("B", Arrays.asList("D", "E")); 
+graph.put("C", Arrays.asList("F", "G")); 
+graph.put("D", new ArrayList<>()); 
+graph.put("E", new ArrayList<>()); 
+graph.put("F", new ArrayList<>()); 
+graph.put("G", new ArrayList<>()); 
+Map<String, Integer> heuristic = new HashMap<>(); 
+heuristic.put("A", 7); 
+heuristic.put("B", 6); 
+heuristic.put("C", 2); 
+heuristic.put("D", 1); 
+heuristic.put("E", 4); 
+heuristic.put("F", 3); 
+heuristic.put("G", 0); 
+bestFirstSearch(graph, heuristic, "A", "G"); 
+} 
+}
